@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>CoCシナリオ概要ジェネレーター</title>
+<style>
+body {
+    font-family: "Noto Sans JP", sans-serif;
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+    padding: 20px;
+}
+label {
+    display: block;
+    margin-top: 10px;
+}
+input, textarea, select {
+    width: 100%;
+    padding: 6px;
+    margin-top: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #2e2e2e;
+    color: #f5f5f5;
+}
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+}
+pre {
+    background-color: #111;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<h1>CoCシナリオ概要ジェネレーター</h1>
+
+<form id="scenarioForm">
+    <label>軽いあらすじや一文（タイトルの上に表示）
+        <textarea id="lightSummary" rows="2" placeholder="例: 怪奇事件が街を襲う…"></textarea>
+    </label>
+
+    <label>シナリオタイトル
+        <input type="text" id="title" placeholder="シナリオタイトル">
+    </label>
+
+    <label>人数
+        <input type="text" id="players" placeholder="例: 3〜5人">
+    </label>
+
+    <label>時間
+        <input type="text" id="time" placeholder="例: 3時間">
+    </label>
+
+    <label>ロスト率
+        <select id="loss">
+            <option value="">選択なし</option>
+            <option value="高">高</option>
+            <option value="中">中</option>
+            <option value="低">低</option>
+        </select>
+    </label>
+
+    <label>対人戦
+        <select id="pvp">
+            <option value="">選択なし</option>
+            <option value="あり">あり</option>
+            <option value="可能性あり">可能性あり</option>
+            <option value="なし">なし</option>
+        </select>
+    </label>
+
+    <label>探索者
+        <select id="investigator">
+            <option value="">選択なし</option>
+            <option value="新規限定">新規限定</option>
+            <option value="継続限定">継続限定</option>
+            <option value="新規・継続可">新規・継続可</option>
+        </select>
+    </label>
+
+    <label>推奨技能
+        <input type="text" id="skills" placeholder="例: 心理学, 目星">
+    </label>
+
+    <label>準技能
+        <input type="text" id="subskills" placeholder="例: 回避, 交渉">
+    </label>
+
+    <label>傾向
+        <input type="text" id="trend" placeholder="例: 探索, 推理">
+    </label>
+
+    <label>あらすじ
+        <textarea id="summary" rows="4" placeholder="シナリオのあらすじ"></textarea>
+    </label>
+
+    <label>HO情報（改行で区切る）
+        <textarea id="ho" rows="6" placeholder="HO1 HO名"></textarea>
+    </label>
+
+    <button type="button" onclick="generate()">生成</button>
+    <button type="button" onclick="copyOutput()">コピー</button>
+</form>
+
+<h2>Discord用出力</h2>
+<pre id="output"></pre>
+
+<script>
+function generate() {
+    const lightSummary = document.getElementById("lightSummary").value.trim();
+    const title = document.getElementById("title").value.trim();
+    const players = document.getElementById("players").value.trim();
+    const time = document.getElementById("time").value.trim();
+    const loss = document.getElementById("loss").value;
+    const pvp = document.getElementById("pvp").value;
+    const investigator = document.getElementById("investigator").value;
+    const skills = document.getElementById("skills").value.trim();
+    const subskills = document.getElementById("subskills").value.trim();
+    const trend = document.getElementById("trend").value.trim();
+    const summary = document.getElementById("summary").value.trim();
+    const ho = document.getElementById("ho").value.trim();
+
+    let output = "";
+
+    // 軽いあらすじ
+    if (lightSummary) output += `\`\`\`\n${lightSummary}\n\`\`\`\n`;
+
+    // タイトル
+    if (title) output += `# ${title}\n`;
+
+    // シナリオ詳細
+    let detail = "";
+    if (players) detail += `人　数：${players}\n`;
+    if (time) detail += `時　間：${time}\n`;
+    if (loss) detail += `ロスト：${loss}\n`;
+    if (pvp) detail += `対人戦：${pvp}\n`;
+    if (investigator) detail += `探索者：${investigator}\n`;
+    if (skills) detail += `技　能：${skills}\n`;
+    if (subskills) detail += `準技能：${subskills}\n`;
+    if (trend) detail += `傾　向：${trend}\n`;
+    if (detail) output += `## ▌シナリオについて\n${detail}\n`;
+
+    // あらすじ
+    if (summary) output += `## ▌あらすじ\n\`\`\`\n${summary}\n\`\`\`\n\n`;
+
+    // 公開HO
+    if (ho) output += `## ▌公開HO\n\`\`\`\n${ho}\n\`\`\`\n`;
+
+    document.getElementById("output").textContent = output;
+}
+
+// コピー用関数
+function copyOutput() {
+    const output = document.getElementById("output");
+    navigator.clipboard.writeText(output.textContent).then(() => {
+        alert("Discord用文章をコピーしました！");
+    }, () => {
+        alert("コピーに失敗しました。");
+    });
+}
+</script>
+
+</body>
+</html>

@@ -3,41 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <title>CoCシナリオ概要ジェネレーター</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body {
     font-family: "Noto Sans JP", sans-serif;
     background-color: #1e1e1e;
     color: #f5f5f5;
-    padding: 20px;
+    padding: 15px;
+    font-size: 16px; /* 文字を大きめに */
 }
+
 label {
     display: block;
-    margin-top: 10px;
+    margin-top: 12px;
 }
+
 input, textarea, select {
     width: 100%;
-    padding: 6px;
-    margin-top: 4px;
-    border-radius: 4px;
+    padding: 10px; /* タッチ操作しやすく */
+    margin-top: 6px;
+    border-radius: 6px;
     border: 1px solid #ccc;
     background-color: #2e2e2e;
     color: #f5f5f5;
+    font-size: 16px; /* 入力文字も大きく */
+    box-sizing: border-box;
 }
+
 button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    margin-top: 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     background-color: #4caf50;
     color: #fff;
     cursor: pointer;
 }
+
 pre {
     background-color: #111;
-    padding: 10px;
-    border-radius: 4px;
+    padding: 12px;
+    border-radius: 6px;
     overflow-x: auto;
     white-space: pre-wrap;
+    font-size: 16px; /* 出力も大きく */
+}
+
+/* 小さい画面用に微調整 */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 10px;
+        font-size: 15px;
+    }
+    input, textarea, select, button {
+        font-size: 15px;
+        padding: 8px;
+    }
+    pre {
+        font-size: 15px;
+    }
 }
 </style>
 </head>
@@ -106,7 +132,7 @@ pre {
     </label>
 
     <label>HO情報（改行で区切る）
-        <textarea id="ho" rows="6" placeholder="HO1 HO名"></textarea>
+        <textarea id="ho" rows="6" placeholder="HO1 HO名\nHO1内容\nHO2 HO名\nHO2内容"></textarea>
     </label>
 
     <button type="button" onclick="generate()">生成</button>
@@ -134,10 +160,10 @@ function generate() {
     let output = "";
 
     // 軽いあらすじ
-    if (lightSummary) output += `\`\`\`\n${lightSummary}\n\`\`\`\n`;
+    if (lightSummary) output += `\`\`\`\n${lightSummary}\n\`\`\`\n\n`;
 
     // タイトル
-    if (title) output += `# ${title}\n`;
+    if (title) output += `# ${title}\n\n`;
 
     // シナリオ詳細
     let detail = "";
